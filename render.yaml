@@ -2,7 +2,6 @@ services:
   - type: web
     name: ai-shortlisting-backend
     env: node
-    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -17,9 +16,12 @@ services:
   - type: web
     name: ai-shortlisting-frontend
     env: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         fromService:
