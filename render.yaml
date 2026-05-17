@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: ai-shortlisting-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  - type: static_site
+    name: ai-shortlisting-frontend
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ai-shortlisting-backend
+          envVarKey: RENDER_EXTERNAL_URL
